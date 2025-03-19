@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import os
+from multiprocessing import Lock, Process
 
 # Copyright (c) 2016 The Johns Hopkins University/Applied Physics Laboratory
 # All Rights Reserved.
@@ -15,8 +17,38 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kmip.services.server import server
+from kmip.services.server import KmipServer
+
+
+def start_server(lock):
+
+
+    # acquire the lock
+    with lock:
+        print(f"Current working directory: {os.getcwd()}")
+        # block for a moment
+        server = KmipServer(
+            config_path='./bin/pykmip_server/server.conf',
+            log_path='./bin/pykmip_server/server.log',
+        )
+        server.start()
+        server.serve()
+        # server.stop()
+
+def run_server():
+    # change start method
+    # set_start_method('fork')
+    # create a shared lock
+    lock = Lock()
+    # create a process that uses the lock
+    process = Process(target=start_server, args=(lock,))
+    # start the process
+    process.start()
+    # wait for the process to finish
+    process.join()
+
 
 
 if __name__ == '__main__':
-    server.main()
+    # server.main()
+    run_server()
