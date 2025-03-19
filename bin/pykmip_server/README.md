@@ -1,8 +1,36 @@
+## Setup the project
+
+Create a virtual environment:
+
+```sh
+python3.11 -m venv .venv
+```
+
+Activate it:
+
+```sh
+. ./.venv/bin/activate`
+```
+
+Install dependencies:
+
+```sh
+pip3 install -r requirements.txt
+```
+
+Generate the keys and certificates:
+
+```sh
+cd bin/pykmip_server/certs
+./generate.sh
+```
+ 
+
 ## Server Configuration
 
 In the `server.conf` file, make sure that:
 
-- `auth_suite` is set to `TLS1.2`; TLS1.0 is no more supported by many tools, including `curl`\
+- `auth_suite` is set to `TLS1.2`; TLS 1.0 is now unsupported by many tools, including `curl`\
 - `enable_tls_client_auth` is set to `False` to avoir verifying the client certificate X509 extensions (or the
   `generate.sh` script must be modified to add them)
 
